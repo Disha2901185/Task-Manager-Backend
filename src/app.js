@@ -1,45 +1,67 @@
 const express = require("express");
-const connectDB = require("./config/database");
-
-
-require("./config/database");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
-
-const app = express();
-const PORT = 3001;
 require("dotenv").config();
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 const { userAuth } = require("../middlewares/auth");
-const cookieParser = require("cookie-parser");
 const { authRouter } = require("../routes/authRoutes");
 const profileRouter = require("../routes/profile.routes");
 const taskRouter = require("../routes/tasks.routes");
-// const requestRouter = require("../routes/request.routes");
-// const { userRouter } = require("../routes/userRoutes");
+const connectDB = require("./config/database");
 
-app.use(
-  cors({
-    origin: "http://localhost:5173", // replace with your frontend URL
-    credentials: true, // allow cookies to be sent
-  })
-);
+const app = express();
+const PORT = 3001;
+
+// Swagger setup
+const path = require('path');
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Uniteam API Documentation',
+      version: '1.0.0',
+      description: 'API documentation for the Uniteam backend',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3001',
+      },
+    ],
+  },
+  apis: [path.join(__dirname, '../routes/*.js')], // ✅ Absolute path is better
+};
+
+
+const swaggerSpec = swaggerJsdoc(options);
+
+// Middlewares
+app.use(cors({
+  origin: "http://localhost:5173", // replace with your frontend origin
+  credentials: true,
+}));
 app.use(express.json());
 app.use(cookieParser());
+
+// Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Connect to database and start server
 connectDB()
   .then(() => {
-    console.log("Database Connection Established.......");
+    console.log("✅ Database connection established");
     app.listen(PORT, () => {
-      console.log(`Server is listening on port http://localhost:${PORT}`);
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
+      console.log(`📄 Swagger docs available at http://localhost:${PORT}/api-docs`);
     });
   })
   .catch((err) => {
-    console.error("Database Cannot be connected", err);
+    console.error("❌ Database connection failed:", err);
   });
 
-//Routes
-
+// Routes
 app.use("/", authRouter);
 app.use("/profile", profileRouter);
-app.use("/task",userAuth, taskRouter);
-// app.use("/", requestRouter);
-// app.use("/user", userRouter);
+app.use("/task", userAuth, taskRouter);
