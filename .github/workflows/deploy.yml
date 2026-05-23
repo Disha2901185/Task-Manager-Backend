@@ -20,7 +20,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd backend
+            cd /home/ubuntu/Task-Manager-Backend
 
             git pull origin main
 
