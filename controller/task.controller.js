@@ -1,4 +1,3 @@
-// const Project = require("../src/models/project.model");
 const Task = require("../src/models/task.model");
 // Converts IST date string to UTC Date
 function convertISTToUTC(dateStr) {
@@ -6,6 +5,8 @@ function convertISTToUTC(dateStr) {
   const offsetMs = 5.5 * 60 * 60 * 1000;
   return new Date(istDate.getTime() - offsetMs);
 }
+
+
 
 // Converts UTC date to IST Date object (for displaying)
 function convertUTCToIST(date) {
