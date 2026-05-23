@@ -71,7 +71,6 @@ const getTasksWithFilters = async (req, res) => {
 
     if (overdue) {
       filter.dueDate = { $lt: utcStart };
-      // filter.status = "todo"; // or whatever is your "incomplete" status
     }
 
     const tasks = await Task.find(filter);
