@@ -27,7 +27,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3001',
+        url: 'https://taskmanager-mern.duckdns.org/api',
       },
     ],
   },
@@ -39,7 +39,10 @@ const swaggerSpec = swaggerJsdoc(options);
 
 // Middlewares
 app.use(cors({
-  origin: "http://localhost:5173", // replace with your frontend origin
+  origin: [
+  "http://localhost:3000",
+  "https://taskmanager-mern.duckdns.org"
+], // replace with your frontend origin
   credentials: true,
 }));
 app.use(express.json());
@@ -62,6 +65,6 @@ connectDB()
   });
 
 // Routes
-app.use("/", authRouter);
-app.use("/profile", profileRouter);
-app.use("/task", userAuth, taskRouter);
+app.use("/api", authRouter);
+app.use("/api/profile", profileRouter);
+app.use("/api/task", userAuth, taskRouter);
