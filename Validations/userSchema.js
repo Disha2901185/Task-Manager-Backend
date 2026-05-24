@@ -12,8 +12,9 @@ const userSchema = z.object({
     .min(6, "Password must be at least 6 characters long"),
   age: z.number().gte(18, "Age must be greater than 18"),
   gender: z.enum(["Male", "Female", "Others"], {
-    message: "Gender must be male ,female or others",
+    message: "Gender must be male, female, or others",
   }),
+  
   photoUrl: z
     .string()
     .url("Invalid URL")
