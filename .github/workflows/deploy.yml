@@ -32,5 +32,5 @@ jobs:
               docker run -d \
               --name backend-container \
               --env-file .env \
-              -p 5000:5000 \
+              -p 5000:3001 \
               backend-app
